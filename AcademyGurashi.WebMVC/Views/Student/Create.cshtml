@@ -1,0 +1,66 @@
+﻿@model AcademyGurashi.WebMVC.Models.Student
+@using System.Data
+@{
+    ViewData["Title"] = "Create";
+
+
+    DataTable ds = ViewBag.ListOfCourses as DataTable;
+    var rows = from x in ds.AsEnumerable()
+               select new
+               {
+                   id = x.Field<int>("ID"),
+                   name = x.Field<string>("name")
+               };
+}
+
+<h1>Create</h1>
+
+<h4>Student & Assign Course</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="StudentID" class="control-label"></label>
+                <input asp-for="StudentID" class="form-control" />
+                <span asp-validation-for="StudentID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="control-label"></label>
+                <input asp-for="LastName" class="form-control" />
+                <span asp-validation-for="LastName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FirstMidName" class="control-label"></label>
+                <input asp-for="FirstMidName" class="form-control" />
+                <span asp-validation-for="FirstMidName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EnrollmentDate" class="control-label"></label>
+                <input asp-for="EnrollmentDate" class="form-control" />
+                <span asp-validation-for="EnrollmentDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <h4>
+                    Select your Courses:
+                </h4>
+                @foreach (var item in rows)
+                {
+                    <input id="chk_@(item.name)" type="checkbox" value="@item.id" /> @item.name <br />
+                }
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
